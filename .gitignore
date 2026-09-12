@@ -37,3 +37,8 @@ Kotlin-js-store
 *.xcscmblueprint
 *.xcbkptlist
 *.pyc
+
+## skills
+.agents/
+.codebuddy/
+skills-lock.json

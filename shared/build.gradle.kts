@@ -2,6 +2,7 @@ import com.tencent.kuikly.gradle.config.KuiklyConfig
 
 plugins {
   kotlin("multiplatform")
+  kotlin("plugin.serialization") version "2.1.21"
   kotlin("native.cocoapods")
   id("com.android.library")
   id("com.google.devtools.ksp")
@@ -60,6 +61,9 @@ kotlin {
       dependencies {
         implementation("com.tencent.kuikly-open:core:${Version.getKuiklyVersion()}")
         implementation("com.tencent.kuikly-open:core-annotations:${Version.getKuiklyVersion()}")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+        implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
       }
     }

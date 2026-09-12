@@ -3,11 +3,15 @@ package com.example.song_list_page
 import com.example.song_list_page.base.BasePager
 import com.example.song_list_page.base.Utils
 import com.example.song_list_page.base.Utils.formatViewCount
+import com.example.song_list_page.core.network.ApiException
+import com.example.song_list_page.core.network.LBookAlbumAudioApi
+import com.example.song_list_page.core.network.model.AudioBookAudiosResponse
 import com.tencent.kuikly.core.annotations.Page
 import com.tencent.kuikly.core.base.Color
 import com.tencent.kuikly.core.base.ViewBuilder
 import com.tencent.kuikly.core.base.ViewContainer
 import com.tencent.kuikly.core.base.attr.ImageUri
+import com.tencent.kuikly.core.coroutines.launch
 import com.tencent.kuikly.core.layout.FlexAlign
 import com.tencent.kuikly.core.layout.FlexDirection
 import com.tencent.kuikly.core.layout.FlexJustifyContent
@@ -16,6 +20,34 @@ import com.tencent.kuikly.core.views.Text
 import com.tencent.kuikly.core.views.View
 
 @Page("router") internal class SongListPage: BasePager() {
+  override fun created() {
+    super.created()
+    loadAlbumAudios()
+  }
+
+  override fun pageWillDestroy() {
+    super.pageWillDestroy()
+  }
+
+  // 请求听书专辑音频列表
+  private fun loadAlbumAudios() {
+    val request = LBookAlbumAudioApi.AlbumAudiosRequest(albumId = 138195288L, page = 1)
+    lifecycleScope.launch {
+      try {
+        // Utils.logToNative("开始请求听书列表, thread=${Thread.currentThread().name}")
+        val resp: AudioBookAudiosResponse = LBookAlbumAudioApi.get(this@SongListPage, request)
+        Utils.logToNative("听书列表: status=${resp.status}, total=${resp.total}, size=${resp.audios.size}")
+        resp.audios.firstOrNull()?.let { audio ->
+          Utils.logToNative("首条音频: ${audio.audioName} / ${audio.authorName} / hash=${audio.hash}")
+        }
+      } catch (e: ApiException) {
+        Utils.logToNative("听书列表请求失败: code=${e.code}, msg=${e.message}")
+      } catch (e: Exception) {
+        Utils.logToNative("听书列表解析失败: ${e.message}")
+      }
+    }
+  }
+
   override fun body(): ViewBuilder {
     val context = this
     return {

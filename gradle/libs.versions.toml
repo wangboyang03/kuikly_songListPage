@@ -1,6 +1,7 @@
 [versions]
 agp = "9.3.2"
 androidsvg = "1.4"
+coreGradlePlugin = "2.7.0-2.1.21"
 coreKtx = "1.19.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -11,6 +12,7 @@ material = "1.14.0"
 [libraries]
 androidsvg = { module = "com.caverock:androidsvg", version.ref = "androidsvg" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+core-gradle-plugin = { module = "com.tencent.kuikly-open:core-gradle-plugin", version.ref = "coreGradlePlugin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
