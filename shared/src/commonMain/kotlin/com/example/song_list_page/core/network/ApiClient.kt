@@ -1,5 +1,6 @@
 package com.example.song_list_page.core.network
 
+import com.example.song_list_page.base.Utils
 import com.tencent.kuikly.core.module.NetworkModule
 import com.tencent.kuikly.core.nvi.serialization.json.JSONObject
 import com.tencent.kuikly.core.pager.Pager
@@ -10,7 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 // 坑点 鸿蒙不支持KMP框架的Ktor 因此用官方的NetworkKMM
 // 坑点 Kuikly网络层要求必须使用JSONObject 因此不能直接写serialization
 // 坑点 requestGet无法指定请求头 但是接口要求application/json 因此使用httpRequest 通过isPost控制请求类型
-class ApiClient(@PublishedApi internal val pager: Pager) {
+internal class ApiClient(@PublishedApi internal val pager: Pager) {
   val module by lazy(LazyThreadSafetyMode.NONE) {
     pager.acquireModule<NetworkModule>(NetworkModule.MODULE_NAME)
   }
@@ -48,6 +49,7 @@ class ApiClient(@PublishedApi internal val pager: Pager) {
     }
     module.httpRequest(url, isPost, param, headers, null, 30) { data, success, errMsg, resp ->
       if (success) {
+        Utils.logToNative("Query_Original_Response ${data.toString()}")
         cont.resumeWith(runCatching { json.decodeFromString<T>(data.toString()) })
       } else {
         cont.resumeWith(Result.failure(ApiException(resp.statusCode ?: -1, errMsg)))

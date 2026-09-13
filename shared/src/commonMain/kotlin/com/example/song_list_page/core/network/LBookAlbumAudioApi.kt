@@ -23,7 +23,7 @@ object LBookAlbumAudioApi {
 
   suspend fun get(pager: Pager, request: AlbumAudiosRequest): AudioBookAudiosResponse {
     val client = ApiClient(pager)
-    return client.get("$Constants.BASE_URL$Constants.ALBUM_AUDIOS", buildRequestParams(request))
+    return client.get("${Constants.BASE_URL}${Constants.ALBUM_AUDIOS}", buildRequestParams(request))
   }
 
   // 拼接参数

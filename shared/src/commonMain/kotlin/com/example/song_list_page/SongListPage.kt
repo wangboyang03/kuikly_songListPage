@@ -15,6 +15,7 @@ import com.tencent.kuikly.core.coroutines.launch
 import com.tencent.kuikly.core.layout.FlexAlign
 import com.tencent.kuikly.core.layout.FlexDirection
 import com.tencent.kuikly.core.layout.FlexJustifyContent
+import com.tencent.kuikly.core.pager.PageData
 import com.tencent.kuikly.core.views.Image
 import com.tencent.kuikly.core.views.Text
 import com.tencent.kuikly.core.views.View
@@ -50,19 +51,22 @@ import com.tencent.kuikly.core.views.View
 
   override fun body(): ViewBuilder {
     val context = this
+    val _pageData = this.pagerData
     return {
       attr {
         flex(1f)
-        backgroundColor(0xFFf2f2f2)
+        backgroundColor(0xFF245df7) // 测试数值
       }
-      Header("", "", "", "", "", 32f)
+      Header("", "", "", "", "", 32f, _pageData)
     }
   }
 }
 
 // 头部
-fun ViewContainer<*, *>.Header(resourceImage: String, title: String, author: String, updateTime: String, desc: String, topHeight: Float) {
-  val mainColor = 0xffdcdcdc
+fun ViewContainer<*, *>.Header(resourceImage: String, title: String, author: String, updateTime: String, desc: String, topHeight: Float, pageData: PageData) {
+  val mainColor = 0xff000000
+  val contentWidth = pageData.pageViewWidth - 20f - 15f - 88f - 15f
+
   View {
     attr {
       height(180f + topHeight)
@@ -86,10 +90,10 @@ fun ViewContainer<*, *>.Header(resourceImage: String, title: String, author: Str
     View {
       attr {
         absolutePositionAllZero()
-        // TODO 需要从接口拿到下发的资源图 下载到沙箱 读取图片色调 再根据主题模式进行渐变渲染
         backgroundColor(0xFF000000)
       }
     }
+
     View {
       attr {
         absolutePositionAllZero()
@@ -100,26 +104,61 @@ fun ViewContainer<*, *>.Header(resourceImage: String, title: String, author: Str
         attr {
           padding(20f, 20f, 15f, 15f)
         }
+
         View {
           attr {
             flexDirectionRow()
+            alignItems(FlexAlign.FLEX_START)
           }
+
           ResourceImage("http://imge.kugou.com/stdmusic/{size}/20250217/20250217223801706860.jpg", true, 977623)
           View {
             attr {
+              width(contentWidth)
+              height(60f)
               flexDirectionColumn()
               alignItems(FlexAlign.FLEX_START)
-              flex(1f)
-//              height(60f)
             }
+
+            // 标题
             Text {
               attr {
                 text("农家傻妻：腹黑皇叔好宠溺|古代甜宠|经商种田")
+                width(contentWidth)
                 fontSize(16f)
                 color(0xFFFFFFFF)
                 lines(2)
-                lineHeight(22f)
-//                marginTop(-45f)
+                // marginTop(-45f)
+              }
+            }
+
+            // 作者 更新时间
+            View {
+              attr {
+                width(contentWidth)
+                flexDirectionRow()
+                alignItems(FlexAlign.CENTER)
+                marginTop(15f)
+                marginBottom(8f)
+              }
+
+              Text {
+                attr {
+                  text("鹿瑶古风有声剧")
+                  fontSize(11f)
+                  color(0xFFFFFFFF)
+                  lines(1)
+                }
+              }
+              Text {
+                attr {
+                  text("2025年08月31日更新")
+                  fontSize(10f)
+                  color(0xFFFFFFFF)
+                  lines(1)
+                  marginLeft(8f)
+                  marginRight(11f)
+                }
               }
             }
           }
